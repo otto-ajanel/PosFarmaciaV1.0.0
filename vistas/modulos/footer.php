@@ -1,8 +1,8 @@
 <footer class="main-footer">
-	
-	<strong>Copyright &copy; 2021 <a href="" target="_blank">RocksodiaSystem</a>.</strong>
+	<p class="text-colours">
 
-	Todos los derechos reservados.
-
-
+		<strong >Copyright &copy;<?php echo date("Y")?> <a href="" target="_blank">RocksodiaSystem</a>.</strong>
+		Todos los derechos reservados.
+	</p>
+		
 </footer>

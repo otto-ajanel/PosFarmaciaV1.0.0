@@ -14,6 +14,7 @@ if ($_SESSION["perfil"]=="Vendedor") {
     <ol class="breadcrumb">
       <li><a href="inicio"><i class="ion-navicon-round"></i>Inicio</a></li>
     </ol>
+  </section>
 
      <section class="content">
           <div class="box">
@@ -110,7 +111,7 @@ MODAL AGREGAR TIPO PRODUCTO
 
               <div class="input-group">
 
-                <span class="input-group-addon"><i class="fa fab fa-modx"></i></span>
+                <span class="input-group-addon"><i class=" fa fab fa-modx"></i></i></span>
 
                 <input type="text" class="form-control input-lg" name="nuevoTipo" placeholder="Ingresar tipo de producto" required>
 
@@ -187,7 +188,7 @@ MODAL EDITAR TIPO DE PRODUCTO
 
               <div class="input-group">
 
-                <span class="input-group-addon"><i class="fa fab fa-modx"></i></span>
+                <span class="input-group-addon"><i class=" fa fab fa-modx"></i></span>
 
                 <input type="text" class="form-control input-lg" name="editarTipo" id="editarTipo" required>
 

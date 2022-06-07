@@ -1,74 +1,75 @@
  <header class="main-header">
 
-	<!--=====================================
+ 	<!--=====================================
 	LOGOTIPO
 	======================================-->
 
-	<!--=====================================
+ 	<!--=====================================
 	BARRA DE NAVEGACIÓN
 	======================================-->
-	<nav class="navbar navbar-static-top header-all" role="navigation">
+ 	<nav class="navbar navbar-static-top header-all" role="navigation">
 
-		<!-- Botón de navegación -->
+ 		<!-- Botón de navegación -->
 
-		<div class="header-info grow2">
-			 <img src="vistas\dist\img\logo.PNG" alt="Logo">
-			 <h3>Farmacia Nissi</h3>
-		</div>
-
-
-		<!-- perfil de usuario -->
-
-		<div class="navbar-custom-menu grow1">
-
-			<ul class="nav navbar-nav">
-
-				<li class="dropdown user user-menu">
-
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-
-					<?php
-
-					if($_SESSION["foto"] != ""){
-
-						echo '<img src="'.$_SESSION["foto"].'" class="user-image">';
-
-					}else{
+ 		<div class="header-info grow2" id="cabezote">
+ 			<img src="vistas\dist\img\logo.PNG" alt="Logo">
+ 			<h3>Farmacia Nissi</h3>
+ 		</div>
 
 
-						echo '<img src="vistas/img/usuarios/default/anonymous.png" class="user-image">';
 
-					}
+ 		<!-- perfil de usuario -->
 
 
-					?>
+ 		<div class="navbar-custom-menu grow1">
 
-						<span class="hidden-xs"><?php  echo $_SESSION["nombre"]; ?></span>
 
-					</a>
+ 			<ul class="nav navbar-nav">
 
-					<!-- Dropdown-toggle -->
+ 				<li class="dropdown user user-menu">
 
-					<ul class="dropdown-menu">
+ 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 
-						<li class="user-body">
+ 						<?php
 
-							<div class="pull-right">
+							if ($_SESSION["foto"] != "") {
 
-								<a href="salir" class="btn btn-default btn-flat">Salir</a>
+								echo '<img src="' . $_SESSION["foto"] . '" class="user-image">';
+							} else {
 
-							</div>
 
-						</li>
+								echo '<img src="vistas/img/usuarios/default/anonymous.png" class="user-image">';
+							}
 
-					</ul>
 
-				</li>
+							?>
 
-			</ul>
+ 						<span class="hidden-xs"><?php echo $_SESSION["nombre"]; ?></span>
 
-		</div>
+ 					</a>
 
-	</nav>
+ 					<!-- Dropdown-toggle -->
+
+ 					<ul class="dropdown-menu">
+
+ 						<li class="user-body">
+
+ 							<div class="pull-right">
+
+ 								<a href="salir" class="btn btn-default btn-flat">Salir</a>
+
+ 							</div>
+
+ 						</li>
+
+ 					</ul>
+
+ 				</li>
+
+ 			</ul>
+
+ 		</div>
+
+ 	</nav>
 
  </header>

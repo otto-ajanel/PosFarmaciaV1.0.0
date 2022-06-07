@@ -35,11 +35,13 @@ require_once "modelos/caducidad.modelo.php";
 
 require_once "modelos/inventario.modelo.php";
 
-require_once "extensiones/vendor/autoload.php";
+require_once "modelos/asignacion.Modelo.php";
+
+
 
 require_once "modelos/productosofertas.modelo.php";
 require_once "modelos/oferta.modelo.php";
-require_once "extensiones/vendor/autoload.php";
+
 
 $plantilla = new ControladorPlantilla();
 

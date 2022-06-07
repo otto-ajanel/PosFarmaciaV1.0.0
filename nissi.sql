@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 17-09-2021 a las 01:38:39
--- Versión del servidor: 10.4.20-MariaDB
--- Versión de PHP: 8.0.9
+-- Tiempo de generación: 07-06-2022 a las 05:29:42
+-- Versión del servidor: 10.4.24-MariaDB
+-- Versión de PHP: 8.1.5
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -17,346 +17,786 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
+--
+-- Base de datos: `nissi`
+--
 
+-- --------------------------------------------------------
 
--- BASE DE DATOS: `NISSI`
+--
+-- Estructura de tabla para la tabla `asignacion_clasificacion`
+--
 
+CREATE TABLE `asignacion_clasificacion` (
+  `idAsignacionClasificacion` int(11) NOT NULL,
+  `CODIGO_CLASIFICACION` int(11) NOT NULL,
+  `CODIGO_PRODUCTO` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
-CREATE TABLE `CLIENTE` (
-  `CODIGO_CLIENTE` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Clave primari del cliente, identificador único',
-  `NIT` VARCHAR(20) COLLATE UTF8_SPANISH_CI NOT NULL COMMENT 'Nit del cliente',
-  `NOMBRE_CLIENTE` VARCHAR(50) COLLATE UTF8_SPANISH_CI NOT NULL COMMENT 'Nombre del cliente',
-  `DIRECCION` VARCHAR(50) COLLATE UTF8_SPANISH_CI NOT NULL COMMENT 'Dirección para la factura del cliente',
-  `VISIBLE` INT(1) NOT NULL DEFAULT '1' COMMENT 'Estado del cliente, activo = 1, desactivo = 0',
-  PRIMARY KEY (`CODIGO_CLIENTE`)
-) ENGINE=INNODB DEFAULT CHARSET=UTF8 COLLATE=UTF8_SPANISH_CI;
+--
+-- Volcado de datos para la tabla `asignacion_clasificacion`
+--
 
+INSERT INTO `asignacion_clasificacion` (`idAsignacionClasificacion`, `CODIGO_CLASIFICACION`, `CODIGO_PRODUCTO`) VALUES
+(1, 2, 15),
+(2, 4, 15),
+(3, 1, 16),
+(4, 3, 16);
 
-/*-------------------------------------------------------------------------------------------------------------------------*/
+-- --------------------------------------------------------
 
-CREATE TABLE `CONTACTO_CLIENTE` (
-  `CODIGO_CONTACTO_C` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Clave primaria del contacto del cliente, identificador único',
-  `CODIGO_CLIENTE` INT(11) NOT NULL COMMENT 'Clave secundaria de la tabla cliente, para identificar al cliente',
-  `TELEFONO` INT(10) NOT NULL COMMENT 'Número de teléfono del cliente',
-  PRIMARY KEY (`CODIGO_CONTACTO_C`),
-  FOREIGN KEY (`CODIGO_CLIENTE`) REFERENCES `CLIENTE` (`CODIGO_CLIENTE`)
-) ENGINE=INNODB DEFAULT CHARSET=UTF8 COLLATE=UTF8_SPANISH_CI;
+--
+-- Estructura de tabla para la tabla `clasificacion`
+--
 
-/*-------------------------------------------------------------------------------------------------------------------------*/
+CREATE TABLE `clasificacion` (
+  `CODIGO_CLASIFICACION` int(11) NOT NULL COMMENT 'Clave primaria de la clasificación del producto, identificador único',
+  `CLASIFICACION` varchar(25) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Nombre de la clasificación del producto, ejemplo: Analgésico',
+  `VISIBLE` int(1) NOT NULL DEFAULT 1 COMMENT 'Estado de la clasificación del producto, activo = 1, desactivo = 0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
-CREATE TABLE `PROVEEDOR` (
-  `CODIGO_PROVEEDOR` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Clave primaria del proveedor, identificador único',
-  `NIT` VARCHAR(20) COLLATE UTF8_SPANISH_CI NOT NULL COMMENT 'Nit del proveedor',
-  `NOMBRE_PROVEEDOR` VARCHAR(100) COLLATE UTF8_SPANISH_CI NOT NULL COMMENT 'Nombre del proveedor',
-  `DIRECCION` VARCHAR(100) COLLATE UTF8_SPANISH_CI NOT NULL COMMENT 'Dirección del proveedor',
-  `VISIBLE` INT(1) NOT NULL DEFAULT '1' COMMENT 'Estado del proveedor, activo = 1, desactivo = 0',
-  PRIMARY KEY (`CODIGO_PROVEEDOR`)
-) ENGINE=INNODB DEFAULT CHARSET=UTF8 COLLATE=UTF8_SPANISH_CI;
+--
+-- Volcado de datos para la tabla `clasificacion`
+--
 
-/*-------------------------------------------------------------------------------------------------------------------------*/
+INSERT INTO `clasificacion` (`CODIGO_CLASIFICACION`, `CLASIFICACION`, `VISIBLE`) VALUES
+(1, 'ANTIINFLAMATORIOS', 1),
+(2, 'ANTICONCEPTIVOS', 1),
+(3, 'ANTIINFECCIOSOS', 1),
+(4, 'MUCULITICOS', 1),
+(5, 'ANTIDIAREICOS', 1),
+(6, 'amor de Dos ', 0);
 
-CREATE TABLE `CONTACTO_PROVEEDOR` (
-  `CODIGO_CONTACTO_P` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Clave primaria del contacto del proveedor, identificador único',
-  `CODIGO_PROVEEDOR` INT(11) NOT NULL COMMENT 'Clave secundaria de la tabla proveedor, para identificar al proveedor',
-  `TELEFONO` INT(10) NOT NULL COMMENT 'Número de teléfono del proveedor',
-  PRIMARY KEY (`CODIGO_CONTACTO_P`),
-  FOREIGN KEY (`CODIGO_PROVEEDOR`) REFERENCES `PROVEEDOR` (`CODIGO_PROVEEDOR`)
-) ENGINE=INNODB DEFAULT CHARSET=UTF8 COLLATE=UTF8_SPANISH_CI;
+-- --------------------------------------------------------
 
-/*-------------------------------------------------------------------------------------------------------------------------*/
+--
+-- Estructura de tabla para la tabla `cliente`
+--
 
-CREATE TABLE `PRODUCTO` (
-  `CODIGO_PRODUCTO` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Clave primaria del producto, identificador único',
-  `NOMBRE_GENERICO` VARCHAR(50) COLLATE UTF8_SPANISH_CI NOT NULL COMMENT 'Nombre genérico del producto ingresado',
-  `NOMBRE_COMERCIAL` VARCHAR(50) COLLATE UTF8_SPANISH_CI NOT NULL COMMENT 'Nombre comercial del producto ingresado',
-  `STOCK_MIN` INT(10) NOT NULL COMMENT 'Indicador de la cantidad mínima que debe de haber de producto',
-  `STOCK_MAX` INT(10) NOT NULL COMMENT 'Indicador de la cantidad máxima que debe de haber de producto',
-  `VISIBLE` INT(1) NOT NULL DEFAULT '1' COMMENT 'Estado del producto, activo = 1, desactivo = 0',
-  PRIMARY KEY (`CODIGO_PRODUCTO`)
-) ENGINE=INNODB DEFAULT CHARSET=UTF8 COLLATE=UTF8_SPANISH_CI;
+CREATE TABLE `cliente` (
+  `CODIGO_CLIENTE` int(11) NOT NULL COMMENT 'Clave primari del cliente, identificador único',
+  `NIT` varchar(20) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Nit del cliente',
+  `NOMBRE_CLIENTE` varchar(50) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Nombre del cliente',
+  `DIRECCION` varchar(50) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Dirección para la factura del cliente',
+  `VISIBLE` int(1) NOT NULL DEFAULT 1 COMMENT 'Estado del cliente, activo = 1, desactivo = 0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
+--
+-- Volcado de datos para la tabla `cliente`
+--
 
-/*-------------------------------------------------------------------------------------------------------------------------*/
+INSERT INTO `cliente` (`CODIGO_CLIENTE`, `NIT`, `NOMBRE_CLIENTE`, `DIRECCION`, `VISIBLE`) VALUES
+(1, '62463482', 'Santiago', '7 AV 27-22 Z-8', 1),
+(2, '98324321', 'Maria', '7 Av 34 - 12 Zona 8', 1),
+(3, '23949823', 'Juan', 'Calzada Roosevelt Kilómetro 14', 1),
+(4, '79024132', 'Andrea', '19 Avenida 8 - 10 Zona 11', 1),
+(5, '84939201', 'Rodrigo', 'Boulevar Proceres 18-41 Zona 10', 1),
+(6, '12475825', 'Mogollón', 'ciudad', 0),
+(7, '12475825', 'Mogollón', 'ciudad', 1),
+(11111111, 'C/F', 'Default', 'Default', 1);
 
-CREATE TABLE `PRESENTACION` (
-  `CODIGO_PRESENTACION` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Clave primaria de la presentación del producto, identificador único',
-  `PRESENTACION` VARCHAR(25) COLLATE UTF8_SPANISH_CI NOT NULL COMMENT 'Nombre de la presentación del producto, ejemplo: tableta',
-  `VISIBLE` INT(1) NOT NULL DEFAULT '1' COMMENT 'Estado de la presentación del producto, activo = 1, desactivo = 0',
-  PRIMARY KEY (`CODIGO_PRESENTACION`)
-) ENGINE=INNODB DEFAULT CHARSET=UTF8 COLLATE=UTF8_SPANISH_CI;
+-- --------------------------------------------------------
 
-/*-------------------------------------------------------------------------------------------------------------------------*/
+--
+-- Estructura de tabla para la tabla `contacto_cliente`
+--
 
-CREATE TABLE `CLASIFICACION` (
-  `CODIGO_CLASIFICACION` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Clave primaria de la clasificación del producto, identificador único',
-  `CLASIFICACION` VARCHAR(25) COLLATE UTF8_SPANISH_CI NOT NULL COMMENT 'Nombre de la clasificación del producto, ejemplo: Analgésico',
-  `VISIBLE` INT(1) NOT NULL DEFAULT '1' COMMENT 'Estado de la clasificación del producto, activo = 1, desactivo = 0',
-  PRIMARY KEY (`CODIGO_CLASIFICACION`)
-) ENGINE=INNODB DEFAULT CHARSET=UTF8 COLLATE=UTF8_SPANISH_CI;
+CREATE TABLE `contacto_cliente` (
+  `CODIGO_CONTACTO_C` int(11) NOT NULL COMMENT 'Clave primaria del contacto del cliente, identificador único',
+  `CODIGO_CLIENTE` int(11) NOT NULL COMMENT 'Clave secundaria de la tabla cliente, para identificar al cliente',
+  `TELEFONO` int(10) NOT NULL COMMENT 'Número de teléfono del cliente'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
-/*-------------------------------------------------------------------------------------------------------------------------*/
+--
+-- Volcado de datos para la tabla `contacto_cliente`
+--
 
-CREATE TABLE `TIPO_PRODUCTO` (
-  `CODIGO_TIPO` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Clave primaria del tipo de producto, identificador único',
-  `TIPO_PRODUCTO` VARCHAR(25) COLLATE UTF8_SPANISH_CI NOT NULL COMMENT 'Nombre del tipo de producto, puede ser producto de marca o producto genérico',
-  `VISIBLE` INT(1) COLLATE UTF8_SPANISH_CI NOT NULL DEFAULT '1' COMMENT 'Estado del tipo de producto, activo = 1, desactivo = 0',
-  PRIMARY KEY (`CODIGO_TIPO`)
-) ENGINE=INNODB DEFAULT CHARSET=UTF8 COLLATE=UTF8_SPANISH_CI;
+INSERT INTO `contacto_cliente` (`CODIGO_CONTACTO_C`, `CODIGO_CLIENTE`, `TELEFONO`) VALUES
+(1, 1, 55556932),
+(2, 2, 52018384),
+(3, 3, 36619404),
+(4, 4, 36967455),
+(5, 5, 54658342);
 
-/*-------------------------------------------------------------------------------------------------------------------------*/
+-- --------------------------------------------------------
 
-CREATE TABLE `ASIGNACION_PRODUCTO` (
-  `CODIGO_ASIGNACION` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Clave primaria para la asignación de producto, identificador único',
-  `CODIGO_PRODUCTO` INT(11) NOT NULL COMMENT 'Clave secundaria para la identificación del producto',
-  `CODIGO_PRESENTACION` INT(11) NOT NULL COMMENT 'Clave secundaria para la identificación de la presentación del producto',
-  `CODIGO_TIPO` INT(11) NOT NULL COMMENT 'Clave secundaria para la identifación del tipo de producto',
-  `CODIGO_CLASIFICACION` INT(11) NOT NULL COMMENT 'Clave secundaria para la identificación de la clasificación del producto',  
-  PRIMARY KEY (`CODIGO_ASIGNACION`),
-  FOREIGN KEY (`CODIGO_PRODUCTO`) REFERENCES `PRODUCTO` (`CODIGO_PRODUCTO`),
-  FOREIGN KEY (`CODIGO_PRESENTACION`) REFERENCES `PRESENTACION` (`CODIGO_PRESENTACION`),
-  FOREIGN KEY (`CODIGO_CLASIFICACION`) REFERENCES `CLASIFICACION` (`CODIGO_CLASIFICACION`),
-  FOREIGN KEY (`CODIGO_TIPO`) REFERENCES `TIPO_PRODUCTO` (`CODIGO_TIPO`)
-) ENGINE=INNODB DEFAULT CHARSET=UTF8 COLLATE=UTF8_SPANISH_CI;
+--
+-- Estructura de tabla para la tabla `contacto_proveedor`
+--
 
+CREATE TABLE `contacto_proveedor` (
+  `CODIGO_CONTACTO_P` int(11) NOT NULL COMMENT 'Clave primaria del contacto del proveedor, identificador único',
+  `CODIGO_PROVEEDOR` int(11) NOT NULL COMMENT 'Clave secundaria de la tabla proveedor, para identificar al proveedor',
+  `TELEFONO` int(10) NOT NULL COMMENT 'Número de teléfono del proveedor'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
-/*-------------------------------------------------------------------------------------------------------------------------*/
+--
+-- Volcado de datos para la tabla `contacto_proveedor`
+--
 
-CREATE TABLE `OFERTA` (
-  `CODIGO_OFERTA` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Clave primaria para la oferta, identificador único',
-  `CODIGO_ASIGNACION` INT(11) NOT NULL COMMENT 'Clava secundaria para la asignación del producto en oferta',
-  `DESCUENTO` DOUBLE(10,2) NOT NULL COMMENT 'El porcentaje de descuento que se asignará al producto',
-  `FECHA_INICIO` DATE NOT NULL COMMENT 'Fecha en la que inicia la oferta',
-  `FECHA_FIN` DATE NOT NULL COMMENT 'Fecha en la que finaliza la oferta',
-  PRIMARY KEY (`CODIGO_OFERTA`),
-  FOREIGN KEY (`CODIGO_ASIGNACION`) REFERENCES `ASIGNACION_PRODUCTO` (`CODIGO_ASIGNACION`)
-) ENGINE=INNODB DEFAULT CHARSET=UTF8 COLLATE=UTF8_SPANISH_CI;
+INSERT INTO `contacto_proveedor` (`CODIGO_CONTACTO_P`, `CODIGO_PROVEEDOR`, `TELEFONO`) VALUES
+(1, 1, 53556932),
+(2, 2, 82218384),
+(3, 3, 99319404),
+(4, 4, 83927455),
+(5, 5, 29158342),
+(6, 1, 49720012);
 
+-- --------------------------------------------------------
 
-/*-------------------------------------------------------------------------------------------------------------------------*/
+--
+-- Estructura de tabla para la tabla `detalle`
+--
 
-CREATE TABLE `PEDIDO` (
-  `NO_ORDEN` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Clave primaria para distinguir los pedidos, identificador único',
-  `CODIGO_PROVEEDOR` INT(11) NOT NULL COMMENT 'Clave secundaria para identificar el proveedor a quien se hará el pedido',
-  `FECHA_PEDIDO` DATE NOT NULL COMMENT 'Fecha en la que se está haciendo el pedido',
-  `FECHA_ESTIMADA` DATE NOT NULL COMMENT 'Fecha que se estima que llegará el producto',
-  PRIMARY KEY (`NO_ORDEN`), 
-  FOREIGN KEY (`CODIGO_PROVEEDOR`) REFERENCES `PROVEEDOR` (`CODIGO_PROVEEDOR`)
-) ENGINE=INNODB DEFAULT CHARSET=UTF8 COLLATE=UTF8_SPANISH_CI;
+CREATE TABLE `detalle` (
+  `CODIGO_DETALLE` int(11) NOT NULL COMMENT 'Clave primaria para identificar el detalle de inventario, identificador único',
+  `CODIGO_VENTA` int(11) NOT NULL COMMENT 'Clave secundaria para identificar la venta que se está realizando',
+  `CODIGO_INVENTARIO` int(11) NOT NULL COMMENT 'Clave secundaria para identificar el producto que se encuentra en inventario y póder descontarlo del inventario al hacer la venta',
+  `CANTIDAD` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
+--
+-- Volcado de datos para la tabla `detalle`
+--
 
-/*-------------------------------------------------------------------------------------------------------------------------*/
+INSERT INTO `detalle` (`CODIGO_DETALLE`, `CODIGO_VENTA`, `CODIGO_INVENTARIO`, `CANTIDAD`) VALUES
+(14, 28, 11, 3),
+(15, 28, 12, 1),
+(16, 29, 11, 5),
+(17, 29, 12, 1),
+(18, 30, 12, 1),
+(19, 30, 11, 1),
+(20, 30, 14, 1),
+(21, 31, 16, 1),
+(22, 32, 11, 4),
+(23, 32, 14, 1),
+(24, 32, 15, 2),
+(25, 33, 11, 1),
+(26, 33, 12, 1),
+(27, 34, 14, 1);
 
-CREATE TABLE `PEDIDO_PRODUCTO` (
-  `CODIGO_PP` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Clave primaria para identificar el pedido y los productos, identificador único',
-  `NO_ORDEN` INT(11) NOT NULL COMMENT 'Clave secundara para identificar el pedido',
-  `CODIGO_ASIGNACION` INT(11) NOT NULL COMMENT 'Clave secundaria para identificar la asignación del producto',
-  `CANTIDAD` INT(10) NOT NULL COMMENT 'Cantidad del producto que se pedirá al proveedor',
-  `PRECIO_UNITARIO` DOUBLE(10,2) NOT NULL COMMENT 'Precio unitario del producto',
-  PRIMARY KEY (`CODIGO_PP`),
-  FOREIGN KEY (`NO_ORDEN`) REFERENCES `PEDIDO` (`NO_ORDEN`),
-  FOREIGN KEY (`CODIGO_ASIGNACION`) REFERENCES `ASIGNACION_PRODUCTO` (`CODIGO_ASIGNACION`)
-) ENGINE=INNODB DEFAULT CHARSET=UTF8 COLLATE=UTF8_SPANISH_CI;
+-- --------------------------------------------------------
 
-/*-------------------------------------------------------------------------------------------------------------------------*/
+--
+-- Estructura de tabla para la tabla `detalle_pedido`
+--
 
-CREATE TABLE `ROL` (
-  `CODIGO_ROL` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Clave primaria para los roles que existiran en el sistema, identificador único',
-  `ROL` VARCHAR(25) COLLATE UTF8_SPANISH_CI NOT NULL COMMENT 'Rol que existirá en el sistema ejemplo: administrador, vendedor, entre otros',
-  PRIMARY KEY (`CODIGO_ROL`)
-) ENGINE=INNODB DEFAULT CHARSET=UTF8 COLLATE=UTF8_SPANISH_CI;
+CREATE TABLE `detalle_pedido` (
+  `CODIGO_DETALLE_PEDIDO` int(11) NOT NULL COMMENT 'Clave primaria para identificar el pedido y los productos, identificador único',
+  `NO_ORDEN` int(11) NOT NULL COMMENT 'Clave secundara para identificar el pedido',
+  `CODIGO_PRODUCTO` int(11) NOT NULL COMMENT 'Clave primaria del producto, identificador único',
+  `CANTIDAD` int(10) NOT NULL COMMENT 'Cantidad del producto que se pedirá al proveedor',
+  `PRECIO_UNITARIO` double(10,2) NOT NULL COMMENT 'Precio unitario del producto'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
-INSERT INTO `ROL` (`CODIGO_ROL`, `ROL`) VALUES
+--
+-- Volcado de datos para la tabla `detalle_pedido`
+--
+
+INSERT INTO `detalle_pedido` (`CODIGO_DETALLE_PEDIDO`, `NO_ORDEN`, `CODIGO_PRODUCTO`, `CANTIDAD`, `PRECIO_UNITARIO`) VALUES
+(1, 1, 1, 20, 1.50),
+(2, 2, 2, 20, 2.00),
+(3, 3, 3, 20, 2.50),
+(4, 4, 4, 20, 1.50),
+(5, 5, 5, 20, 1.00);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `inventario`
+--
+
+CREATE TABLE `inventario` (
+  `CODIGO_INVENTARIO` int(11) NOT NULL COMMENT 'Clave primaria para identificar el inventario, identificador único',
+  `CODIGO_BARRA` int(11) NOT NULL COMMENT 'Codigo de barra para identificar el producto',
+  `FECHA_INGRESO` date NOT NULL COMMENT 'Fecha de ingreso del producto a la farmacia',
+  `CADUCIDAD` date NOT NULL COMMENT 'Fecha de vencimiento del producto',
+  `PRECIO_COMPRA` float(10,2) NOT NULL COMMENT 'Precio a como se compró el producto',
+  `PRECIO_VENTA` float(10,2) NOT NULL COMMENT 'Precio a como se venderá el producto',
+  `STOCK` int(11) NOT NULL COMMENT 'Cantidad total de producto disponible',
+  `CODIGO_PRODUCTO` int(11) NOT NULL COMMENT 'Clave primaria del producto, identificador único',
+  `CODIGO_PROVEEDOR` int(11) NOT NULL COMMENT 'Clave secundaria para identificar al proveedor'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `inventario`
+--
+
+INSERT INTO `inventario` (`CODIGO_INVENTARIO`, `CODIGO_BARRA`, `FECHA_INGRESO`, `CADUCIDAD`, `PRECIO_COMPRA`, `PRECIO_VENTA`, `STOCK`, `CODIGO_PRODUCTO`, `CODIGO_PROVEEDOR`) VALUES
+(11, 8, '2021-11-10', '2021-11-25', 20.00, 30.00, 11, 8, 2),
+(12, 5, '2021-11-10', '2021-11-17', 200.00, 200.00, 196, 5, 4),
+(13, 1, '2021-11-11', '2021-11-18', 10.00, 10.00, 10, 1, 1),
+(14, 10, '2021-11-10', '2021-11-17', 40.00, 50.00, 37, 10, 5),
+(15, 4, '2021-11-10', '2021-11-17', 40.00, 40.00, 38, 4, 3),
+(16, 13, '2021-11-10', '2021-11-25', 5.00, 6.00, 49, 13, 2),
+(17, 16, '2022-05-24', '2022-06-11', 65.00, 75.00, 87, 16, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `oferta`
+--
+
+CREATE TABLE `oferta` (
+  `CODIGO_OFERTA` int(11) NOT NULL COMMENT 'Clave primaria para la oferta, identificador único',
+  `CODIGO_PRODUCTO` int(11) NOT NULL COMMENT 'Clave primaria del producto, identificador único',
+  `DESCUENTO` double(10,2) NOT NULL COMMENT 'El porcentaje de descuento que se asignará al producto',
+  `FECHA_INICIO` date NOT NULL COMMENT 'Fecha en la que inicia la oferta',
+  `FECHA_FIN` date NOT NULL COMMENT 'Fecha en la que finaliza la oferta'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `oferta`
+--
+
+INSERT INTO `oferta` (`CODIGO_OFERTA`, `CODIGO_PRODUCTO`, `DESCUENTO`, `FECHA_INICIO`, `FECHA_FIN`) VALUES
+(1, 10, 5.00, '2021-08-01', '2021-09-01'),
+(2, 1, 10.00, '2021-08-01', '2021-09-01'),
+(3, 1, 5.00, '2021-08-01', '2021-09-01'),
+(4, 1, 10.00, '2021-08-01', '2021-09-01'),
+(5, 1, 5.00, '2021-08-01', '2021-09-01'),
+(6, 13, 5.00, '2021-11-13', '2021-11-24');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pedido`
+--
+
+CREATE TABLE `pedido` (
+  `NO_ORDEN` int(11) NOT NULL COMMENT 'Clave primaria para distinguir los pedidos, identificador único',
+  `CODIGO_PROVEEDOR` int(11) NOT NULL COMMENT 'Clave secundaria para identificar el proveedor a quien se hará el pedido',
+  `FECHA_PEDIDO` date NOT NULL COMMENT 'Fecha en la que se está haciendo el pedido',
+  `FECHA_ESTIMADA` date NOT NULL COMMENT 'Fecha que se estima que llegará el producto',
+  `VISIBLE` int(1) NOT NULL DEFAULT 1 COMMENT 'Estado del pedido, activo = 1, desactivo = 0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `pedido`
+--
+
+INSERT INTO `pedido` (`NO_ORDEN`, `CODIGO_PROVEEDOR`, `FECHA_PEDIDO`, `FECHA_ESTIMADA`, `VISIBLE`) VALUES
+(1, 1, '2021-11-10', '2021-11-17', 1),
+(2, 2, '2021-08-02', '2021-09-02', 1),
+(3, 3, '2021-08-03', '2021-09-03', 1),
+(4, 4, '2021-08-04', '2021-09-04', 1),
+(5, 5, '2021-08-05', '2021-09-05', 0),
+(6, 2, '2021-11-10', '2021-11-17', 0),
+(7, 3, '2021-11-12', '2021-11-26', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `presentacion`
+--
+
+CREATE TABLE `presentacion` (
+  `CODIGO_PRESENTACION` int(11) NOT NULL COMMENT 'Clave primaria de la presentación del producto, identificador único',
+  `PRESENTACION` varchar(25) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Nombre de la presentación del producto, ejemplo: tableta',
+  `VISIBLE` int(1) NOT NULL DEFAULT 1 COMMENT 'Estado de la presentación del producto, activo = 1, desactivo = 0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `presentacion`
+--
+
+INSERT INTO `presentacion` (`CODIGO_PRESENTACION`, `PRESENTACION`, `VISIBLE`) VALUES
+(1, 'ENVASE', 1),
+(2, 'CAPSULA', 1),
+(3, 'TABLETA', 1),
+(4, 'AMPOLLA', 1),
+(5, 'CREMA', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `producto`
+--
+
+CREATE TABLE `producto` (
+  `CODIGO_PRODUCTO` int(11) NOT NULL COMMENT 'Clave primaria del producto, identificador único',
+  `NOMBRE_GENERICO` varchar(50) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Nombre genérico del producto ingresado',
+  `NOMBRE_COMERCIAL` varchar(50) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Nombre comercial del producto ingresado',
+  `URL` varchar(150) COLLATE utf8_spanish_ci NOT NULL,
+  `CODIGO_PRESENTACION` int(11) NOT NULL COMMENT 'Clave secundaria para la identificación de la presentación del producto',
+  `CODIGO_CLASIFICACION` int(11) NOT NULL COMMENT 'Clave secundaria para la identificación de la clasificación del producto',
+  `CODIGO_TIPO` int(11) NOT NULL COMMENT 'Clave secundaria para la identifación del tipo de producto',
+  `STOCK_MIN` int(10) NOT NULL COMMENT 'Indicador de la cantidad mínima que debe de haber de producto',
+  `STOCK_MAX` int(10) NOT NULL COMMENT 'Indicador de la cantidad máxima que debe de haber de producto',
+  `VISIBLE` int(1) NOT NULL DEFAULT 1 COMMENT 'Estado del producto, activo = 1, desactivo = 0',
+  `CODIGO_BARRAS` int(11) DEFAULT NULL,
+  `UBICACION_PRODUCTO` varchar(200) COLLATE utf8_spanish_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `producto`
+--
+
+INSERT INTO `producto` (`CODIGO_PRODUCTO`, `NOMBRE_GENERICO`, `NOMBRE_COMERCIAL`, `URL`, `CODIGO_PRESENTACION`, `CODIGO_CLASIFICACION`, `CODIGO_TIPO`, `STOCK_MIN`, `STOCK_MAX`, `VISIBLE`, `CODIGO_BARRAS`, `UBICACION_PRODUCTO`) VALUES
+(1, 'FENITOINA', 'DILATIN', '', 1, 1, 1, 5, 100, 1, NULL, ''),
+(2, 'AMPILICINA HOLA', 'AMINOXIDEN HOLA', '', 2, 2, 2, 8, 46, 1, NULL, ''),
+(3, 'MONONITRATO DE ISOSORBIDE', 'ELATAN', '', 1, 1, 1, 50, 100, 1, NULL, ''),
+(4, 'ACEITE DE HIGADO DE BACALAO', 'ALLIXON', '', 1, 1, 1, 5, 75, 1, NULL, ''),
+(5, 'ACEITE DE LINAZA', 'COLESTEVAR', '', 1, 1, 1, 5, 100, 1, NULL, ''),
+(6, 'ACETANOMINAFEN', 'NORSINA', '', 1, 1, 1, 5, 100, 1, NULL, ''),
+(8, 'ACICLOVIR', 'VIRULAX', '', 1, 1, 1, 5, 100, 0, NULL, ''),
+(9, 'ACETATO DE FLUOROMETOLONA', 'FLUMETOL', '', 1, 1, 1, 5, 50, 1, NULL, ''),
+(10, 'ACIDO ACETICO', 'DUVAGIN', '', 1, 1, 1, 5, 100, 1, NULL, ''),
+(11, 'ASPIRINA', 'ASPIRINA', '', 3, 1, 2, 5, 10, 0, NULL, ''),
+(12, 'TESTUNO', 'TEST', '', 1, 1, 1, 50, 100, 0, NULL, ''),
+(13, 'TEST', 'TEST', '', 4, 5, 2, 5, 10, 1, NULL, ''),
+(14, 'TEST TEST', 'TEST TEST', '', 5, 4, 2, 5, 6, 0, NULL, ''),
+(15, 'asd', 'asd', 'vistas/img/productos/default/anonymous.png', 3, 0, 2, 5, 25, 1, NULL, 'useo '),
+(16, 'QWER', 'QWER', 'vistas/img/productos/default/anonymous.png', 2, 0, 2, 5, 5, 1, NULL, 'NO SE PUEDE');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `proveedor`
+--
+
+CREATE TABLE `proveedor` (
+  `CODIGO_PROVEEDOR` int(11) NOT NULL COMMENT 'Clave primaria del proveedor, identificador único',
+  `NIT` varchar(20) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Nit del proveedor',
+  `NOMBRE_PROVEEDOR` varchar(100) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Nombre del proveedor',
+  `DIRECCION` varchar(100) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Dirección del proveedor',
+  `VISIBLE` int(1) NOT NULL DEFAULT 1 COMMENT 'Estado del proveedor, activo = 1, desactivo = 0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `proveedor`
+--
+
+INSERT INTO `proveedor` (`CODIGO_PROVEEDOR`, `NIT`, `NOMBRE_PROVEEDOR`, `DIRECCION`, `VISIBLE`) VALUES
+(1, '43463482', 'Batres', '5ta. Av. Zona 12', 1),
+(2, '75324321', 'Suiva', '19-30 Zona 10', 1),
+(3, '98949823', 'Drogrería Merced', '14, 6 - 38 Zona 2', 1),
+(4, '21024132', 'Farmacia de la Comunidad', '12 avenida 12-54 zona 1', 1),
+(5, '34939201', 'Farmacia Galeno', '1 Cl 18-92 Z 1', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `rol`
+--
+
+CREATE TABLE `rol` (
+  `CODIGO_ROL` int(11) NOT NULL COMMENT 'Clave primaria para los roles que existiran en el sistema, identificador único',
+  `ROL` varchar(25) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Rol que existirá en el sistema ejemplo: administrador, vendedor, entre otros'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `rol`
+--
+
+INSERT INTO `rol` (`CODIGO_ROL`, `ROL`) VALUES
 (1, 'ESPECIAL'),
 (2, 'ADMINISTRADOR'),
 (3, 'VENDEDOR');
 
-/*-------------------------------------------------------------------------------------------------------------------------*/
+-- --------------------------------------------------------
 
-CREATE TABLE `USUARIO` (
-  `CODIGO_USUARIO` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Clave primaria para el usuario, identificador único',
-  `CODIGO_ROL` INT(11) NOT NULL COMMENT 'Clave secundaria para identificar el rol',
-  `NOMBRE` VARCHAR(25) COLLATE UTF8_SPANISH_CI NOT NULL COMMENT 'Nombre de la persona que trabajará en la farmacia',
-  `USUARIO` VARCHAR(25) COLLATE UTF8_SPANISH_CI NOT NULL COMMENT 'Nombre de usuario que identifique a la persona para iniciar sesión en el sistema',
-  `CONTRASEÑA` VARCHAR(75) COLLATE UTF8_SPANISH_CI NOT NULL COMMENT 'Contraseña para iniciar sesión en el sistema',
-  `URL` VARCHAR(70) COLLATE UTF8_SPANISH_CI NOT NULL COMMENT 'dirección para la imagen que identifique al usuario',
-  `ESTADO` INT(2) NOT NULL COMMENT 'Estado del usuario, Activo = 1, desactivo = 0',
-  PRIMARY KEY (`CODIGO_USUARIO`),
-  FOREIGN KEY (`CODIGO_ROL`) REFERENCES `ROL` (`CODIGO_ROL`)
-) ENGINE=INNODB DEFAULT CHARSET=UTF8 COLLATE=UTF8_SPANISH_CI;
+--
+-- Estructura de tabla para la tabla `tipo_producto`
+--
 
+CREATE TABLE `tipo_producto` (
+  `CODIGO_TIPO` int(11) NOT NULL COMMENT 'Clave primaria del tipo de producto, identificador único',
+  `TIPO_PRODUCTO` varchar(25) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Nombre del tipo de producto, puede ser producto de marca o producto genérico',
+  `VISIBLE` int(1) NOT NULL DEFAULT 1 COMMENT 'Estado del tipo de producto, activo = 1, desactivo = 0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `tipo_producto`
+--
+
+INSERT INTO `tipo_producto` (`CODIGO_TIPO`, `TIPO_PRODUCTO`, `VISIBLE`) VALUES
+(1, 'GENERICAS', 1),
+(2, 'MARCA', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `usuario`
+--
+
+CREATE TABLE `usuario` (
+  `CODIGO_USUARIO` int(11) NOT NULL COMMENT 'Clave primaria para el usuario, identificador único',
+  `CODIGO_ROL` int(11) NOT NULL COMMENT 'Clave secundaria para identificar el rol',
+  `NOMBRE` varchar(25) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Nombre de la persona que trabajará en la farmacia',
+  `USUARIO` varchar(25) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Nombre de usuario que identifique a la persona para iniciar sesión en el sistema',
+  `CONTRASEÑA` varchar(75) COLLATE utf8_spanish_ci NOT NULL COMMENT 'Contraseña para iniciar sesión en el sistema',
+  `URL` varchar(70) COLLATE utf8_spanish_ci NOT NULL COMMENT 'dirección para la imagen que identifique al usuario',
+  `ESTADO` int(2) NOT NULL COMMENT 'Estado del usuario, Activo = 1, desactivo = 0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `usuario`
+--
 
 INSERT INTO `usuario` (`CODIGO_USUARIO`, `CODIGO_ROL`, `NOMBRE`, `USUARIO`, `CONTRASEÑA`, `URL`, `ESTADO`) VALUES
 (1, 2, 'admin', 'admin', '$2a$07$asxx54ahjppf45sd87a5auXBm1Vr2M1NV5t/zNQtGHGpS5fFirrbG', '', 1),
-(2, 1, 'AJANEL', 'OTTO', '$2a$07$asxx54ahjppf45sd87a5auVODg.uIPbQ5WGDLMcBmmxyGgh4PRboy', 'vistas/img/usuarios/OTTO/462.png', 1);
+(2, 1, 'otto', 'otto', '$2a$07$asxx54ahjppf45sd87a5aukged6bq6SOMVtuR6oiIdyQPrK0NzEUy', 'vistas/img/usuarios/otto/929.png', 1),
+(3, 2, 'saenz', 'saenz', '$2a$07$asxx54ahjppf45sd87a5auFL5K1.Cmt9ZheoVVuudOi5BCi10qWly', 'vistas/img/usuarios/saenz/602.jpg', 1),
+(4, 2, 'ajanel', 'ajanel', '$2a$07$asxx54ahjppf45sd87a5au5n7Y03xPbJxr1Ew90GVsSgYHp.vX/DO', 'vistas/img/usuarios/ajanel/930.png', 1);
 
-/*-------------------------------------------------------------------------------------------------------------------------*/
+-- --------------------------------------------------------
 
-CREATE TABLE `VENTA` (
-  `CODIGO_VENTA` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Clave primaria para identificar las ventas realizadas, identificador único',
-  `CODIGO_CLIENTE` INT(11) NOT NULL COMMENT 'Clave secundaria para identificar al cliente al cual le corresponde la venta',
-  `CODIGO_USUARIO` INT(11) NOT NULL COMMENT 'Clave secundaria para identificar que usuario realizó la venta',
-  `NO_FACTURA` INT(11) NOT NULL COMMENT 'Número de factura para identificar la venta.',
-  `FECHA` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'Lleva el control de la fecha de venta',
-  PRIMARY KEY (`CODIGO_VENTA`),
-  FOREIGN KEY (`CODIGO_CLIENTE`) REFERENCES `CLIENTE` (`CODIGO_CLIENTE`),
-  FOREIGN KEY (`CODIGO_USUARIO`) REFERENCES `USUARIO` (`CODIGO_USUARIO`)
-) ENGINE=INNODB DEFAULT CHARSET=UTF8 COLLATE=UTF8_SPANISH_CI;
+--
+-- Estructura de tabla para la tabla `venta`
+--
 
+CREATE TABLE `venta` (
+  `CODIGO_VENTA` int(11) NOT NULL COMMENT 'Clave primaria para identificar las ventas realizadas, identificador único',
+  `CODIGO_CLIENTE` int(11) NOT NULL COMMENT 'Clave secundaria para identificar al cliente al cual le corresponde la venta',
+  `CODIGO_USUARIO` int(11) NOT NULL COMMENT 'Clave secundaria para identificar que usuario realizó la venta',
+  `NO_FACTURA` int(11) NOT NULL COMMENT 'Número de factura para identificar la venta.',
+  `FECHA` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'Lleva el control de la fecha de venta'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
-
-
+--
+-- Volcado de datos para la tabla `venta`
+--
 
 INSERT INTO `venta` (`CODIGO_VENTA`, `CODIGO_CLIENTE`, `CODIGO_USUARIO`, `NO_FACTURA`, `FECHA`) VALUES
-(1, 1, 6, 1, '2021-10-15 04:33:53'),
-(21, 5, 6, 2, '2021-10-20 05:34:22'),
-(23, 11111111, 6, 3, '2021-10-20 05:37:03'),
-(24, 11111111, 6, 4, '2021-10-20 05:38:26'),
-(25, 11111111, 6, 5, '2021-10-20 05:38:30'),
-(26, 11111111, 2, 6, '2021-10-22 05:28:19'),
-(27, 11111111, 2, 7, '2021-10-22 20:28:38'),
-(28, 11111111, 2, 8, '2021-10-23 04:03:06'),
-(29, 11111111, 2, 9, '2021-10-23 04:25:22'),
-(30, 11111111, 2, 10, '2021-10-23 04:26:04'),
-(31, 11111111, 2, 11, '2021-10-23 04:26:47'),
-(32, 11111111, 2, 12, '2021-10-23 04:28:41'),
-(33, 11111111, 2, 13, '2021-10-23 04:29:03'),
-(34, 11111111, 2, 14, '2021-10-23 04:29:31'),
-(35, 11111111, 2, 15, '2021-10-23 04:30:23'),
-(36, 11111111, 2, 16, '2021-10-23 04:31:01'),
-(37, 11111111, 2, 17, '2021-10-23 04:31:03'),
-(38, 11111111, 2, 18, '2021-10-23 04:31:20'),
-(39, 11111111, 2, 19, '2021-10-23 04:31:39'),
-(40, 11111111, 2, 20, '2021-10-23 04:31:41'),
-(41, 11111111, 2, 21, '2021-10-23 04:31:42'),
-(42, 11111111, 2, 22, '2021-10-23 04:32:11'),
-(43, 11111111, 2, 23, '2021-10-23 04:32:26'),
-(44, 11111111, 2, 24, '2021-10-23 04:37:02'),
-(46, 11111111, 2, 26, '2021-10-23 05:21:51'),
-(47, 11111111, 2, 27, '2021-10-23 05:23:26'),
-(48, 11111111, 2, 28, '2021-10-23 05:24:21'),
-(49, 11111111, 2, 29, '2021-10-23 05:29:28'),
-(50, 11111111, 2, 30, '2021-10-23 05:30:41'),
-(51, 11111111, 2, 31, '2021-10-23 05:31:10'),
-(52, 11111111, 2, 32, '2021-10-23 05:31:37'),
-(53, 11111111, 2, 33, '2021-10-23 05:34:01'),
-(54, 5, 2, 34, '2021-10-23 05:34:26'),
-(55, 11111111, 2, 35, '2021-10-23 05:34:41'),
-(56, 11111111, 2, 36, '2021-10-23 05:37:59'),
-(57, 11111111, 2, 37, '2021-10-23 05:38:11'),
-(58, 11111111, 2, 38, '2021-10-23 05:38:20'),
-(59, 11111111, 2, 39, '2021-10-23 05:38:46'),
-(60, 11111111, 2, 40, '2021-10-23 05:38:48'),
-(61, 11111111, 2, 41, '2021-10-23 05:38:49'),
-(62, 11111111, 2, 42, '2021-10-23 05:38:49'),
-(63, 11111111, 2, 42, '2021-10-23 05:38:50'),
-(64, 11111111, 2, 43, '2021-10-23 05:38:50'),
-(65, 11111111, 2, 44, '2021-10-23 05:38:50'),
-(66, 11111111, 2, 45, '2021-10-23 05:38:50'),
-(67, 11111111, 2, 46, '2021-10-23 05:38:51'),
-(68, 11111111, 2, 47, '2021-10-23 05:38:51'),
-(69, 11111111, 2, 47, '2021-10-23 05:38:51'),
-(70, 11111111, 2, 47, '2021-10-23 05:38:51'),
-(71, 11111111, 2, 47, '2021-10-23 05:38:51'),
-(72, 11111111, 2, 47, '2021-10-23 05:38:52'),
-(73, 11111111, 2, 48, '2021-10-23 05:38:52'),
-(74, 11111111, 2, 49, '2021-10-23 05:38:52'),
-(75, 11111111, 2, 50, '2021-10-23 05:38:52'),
-(76, 11111111, 2, 51, '2021-10-23 05:38:53'),
-(77, 11111111, 2, 52, '2021-10-23 05:38:53'),
-(78, 11111111, 2, 52, '2021-10-23 05:38:53'),
-(79, 11111111, 2, 52, '2021-10-23 05:38:54'),
-(80, 11111111, 2, 53, '2021-10-23 05:38:54'),
-(81, 11111111, 2, 54, '2021-10-23 05:38:55'),
-(82, 11111111, 2, 55, '2021-10-23 05:38:55'),
-(83, 11111111, 2, 55, '2021-10-23 05:39:35'),
-(84, 11111111, 2, 56, '2021-10-23 05:40:29'),
-(85, 11111111, 2, 57, '2021-10-23 05:40:48'),
-(86, 11111111, 2, 58, '2021-10-23 05:40:49'),
-(87, 11111111, 2, 59, '2021-10-23 05:40:51'),
-(88, 11111111, 2, 60, '2021-10-23 05:40:53'),
-(89, 11111111, 2, 61, '2021-10-23 05:41:01'),
-(90, 11111111, 2, 62, '2021-10-23 05:41:03'),
-(91, 11111111, 2, 63, '2021-10-23 05:41:06'),
-(92, 11111111, 2, 64, '2021-10-23 05:45:42'),
-(93, 11111111, 2, 65, '2021-10-23 05:53:07'),
-(94, 11111111, 2, 66, '2021-10-23 05:53:46'),
-(95, 11111111, 2, 67, '2021-10-23 05:57:56'),
-(96, 11111111, 2, 68, '2021-10-23 05:59:07'),
-(97, 11111111, 2, 69, '2021-10-23 06:01:28'),
-(98, 11111111, 2, 70, '2021-10-23 06:01:34'),
-(99, 11111111, 2, 71, '2021-10-23 06:05:12'),
-(100, 11111111, 2, 72, '2021-10-23 16:11:19'),
-(101, 11111111, 2, 73, '2021-10-23 18:12:17'),
-(102, 11111111, 2, 74, '2021-10-23 18:20:22'),
-(103, 11111111, 2, 75, '2021-10-23 18:35:33'),
-(104, 11111111, 2, 76, '2021-10-23 21:32:36'),
-(105, 11111111, 2, 77, '2021-10-23 21:51:32'),
-(106, 11111111, 2, 78, '2021-10-23 21:54:12'),
-(107, 11, 2, 79, '2021-10-23 22:20:19'),
-(108, 5, 2, 80, '2021-10-23 22:23:30'),
-(109, 11111111, 2, 81, '2021-10-24 01:09:16'),
-(110, 11111111, 2, 82, '2021-10-24 01:18:35'),
-(111, 11111111, 2, 83, '2021-10-24 01:26:15'),
-(112, 1, 2, 84, '2021-10-24 01:31:11'),
-(113, 11111111, 2, 85, '2021-10-24 06:09:40'),
-(114, 1, 2, 86, '2021-10-24 17:50:36'),
-(115, 11111111, 2, 87, '2021-10-25 19:49:51'),
-(116, 11111111, 2, 88, '2021-10-25 20:06:57'),
-(117, 1, 2, 89, '2021-10-31 07:00:46'),
-(118, 11111111, 2, 90, '2021-10-31 07:01:18'),
-(119, 11111111, 2, 91, '2021-10-31 07:10:54'),
-(120, 11111111, 2, 92, '2021-10-31 07:12:35');
+(1, 1, 1, 1, '2021-10-15 10:33:53'),
+(2, 2, 2, 2, '2021-10-20 11:34:22'),
+(3, 3, 1, 3, '2021-10-20 11:37:03'),
+(4, 4, 2, 4, '2021-10-20 11:38:26'),
+(5, 5, 1, 5, '2021-10-20 11:38:30'),
+(6, 1, 2, 6, '2021-10-22 11:28:19'),
+(7, 2, 1, 7, '2021-10-23 02:28:38'),
+(8, 3, 2, 8, '2021-10-23 10:03:06'),
+(9, 4, 1, 9, '2021-10-23 10:25:22'),
+(11, 6, 3, 10, '2021-11-09 07:18:43'),
+(12, 6, 3, 11, '2021-11-09 07:19:46'),
+(14, 6, 3, 12, '2021-11-09 07:21:50'),
+(15, 6, 3, 13, '2021-11-09 07:22:34'),
+(16, 11111111, 3, 14, '2021-11-09 07:27:19'),
+(17, 11111111, 3, 15, '2021-11-09 23:40:06'),
+(18, 7, 3, 16, '2021-11-10 19:02:34'),
+(19, 6, 3, 17, '2021-11-10 19:06:59'),
+(20, 6, 3, 18, '2021-11-10 19:14:58'),
+(21, 7, 3, 19, '2021-11-10 19:15:27'),
+(22, 7, 3, 20, '2021-11-10 19:21:36'),
+(23, 6, 3, 21, '2021-11-10 19:33:47'),
+(24, 6, 3, 22, '2021-11-10 19:34:39'),
+(25, 3, 3, 23, '2021-11-10 19:37:50'),
+(26, 4, 3, 24, '2021-11-10 19:44:17'),
+(27, 11111111, 3, 25, '2021-11-10 19:45:31'),
+(28, 6, 3, 26, '2021-11-11 01:12:36'),
+(29, 11111111, 3, 27, '2021-11-11 01:22:42'),
+(30, 11111111, 3, 28, '2021-11-11 01:55:02'),
+(31, 11111111, 3, 29, '2021-11-11 02:18:16'),
+(32, 11111111, 3, 30, '2021-11-11 03:29:40'),
+(33, 11111111, 1, 31, '2022-05-25 04:37:48'),
+(34, 11111111, 1, 32, '2022-05-25 04:38:08');
 
+--
+-- Índices para tablas volcadas
+--
 
+--
+-- Indices de la tabla `asignacion_clasificacion`
+--
+ALTER TABLE `asignacion_clasificacion`
+  ADD PRIMARY KEY (`idAsignacionClasificacion`),
+  ADD KEY `CODIGO_CLASIFICACION` (`CODIGO_CLASIFICACION`),
+  ADD KEY ` CODIGO_PRODUCTO` (`CODIGO_PRODUCTO`);
 
+--
+-- Indices de la tabla `clasificacion`
+--
+ALTER TABLE `clasificacion`
+  ADD PRIMARY KEY (`CODIGO_CLASIFICACION`);
 
+--
+-- Indices de la tabla `cliente`
+--
+ALTER TABLE `cliente`
+  ADD PRIMARY KEY (`CODIGO_CLIENTE`);
 
+--
+-- Indices de la tabla `contacto_cliente`
+--
+ALTER TABLE `contacto_cliente`
+  ADD PRIMARY KEY (`CODIGO_CONTACTO_C`),
+  ADD KEY `CODIGO_CLIENTE` (`CODIGO_CLIENTE`);
 
+--
+-- Indices de la tabla `contacto_proveedor`
+--
+ALTER TABLE `contacto_proveedor`
+  ADD PRIMARY KEY (`CODIGO_CONTACTO_P`),
+  ADD KEY `CODIGO_PROVEEDOR` (`CODIGO_PROVEEDOR`);
 
+--
+-- Indices de la tabla `detalle`
+--
+ALTER TABLE `detalle`
+  ADD PRIMARY KEY (`CODIGO_DETALLE`),
+  ADD KEY `CODIGO_VENTA` (`CODIGO_VENTA`),
+  ADD KEY `CODIGO_INVENTARIO` (`CODIGO_INVENTARIO`);
 
-/*-------------------------------------------------------------------------------------------------------------------------*/
+--
+-- Indices de la tabla `detalle_pedido`
+--
+ALTER TABLE `detalle_pedido`
+  ADD PRIMARY KEY (`CODIGO_DETALLE_PEDIDO`),
+  ADD KEY `NO_ORDEN` (`NO_ORDEN`),
+  ADD KEY `CODIGO_PRODUCTO` (`CODIGO_PRODUCTO`);
 
-CREATE TABLE `INVENTARIO`(
-	`CODIGO_INVENTARIO` INT (11) NOT NULL AUTO_INCREMENT COMMENT 'Clave primaria para identificar el inventario, identificador único',
-	`CODIGO_BARRAS` INT (11) NOT NULL COMMENT 'Codigo de barra para identificar el producto', 
-	`FECHA_INGRESO` DATE NOT NULL COMMENT 'Fecha de ingreso del producto a la farmacia', 
-	`CADUCIDAD` DATE NOT NULL COMMENT 'Fecha de vencimiento del producto', 
-	`PRECIO_COMPRA` FLOAT(10,2) NOT NULL COMMENT 'Precio a como se compró el producto',
-	`PRECIO_VENTA` FLOAT(10,2) NOT NULL COMMENT 'Precio a como se venderá el producto', 
-	`CANTIDAD_PRODUCTO` INT(11) NOT NULL COMMENT 'Cantidad total de producto disponible', 
-	`CODIGO_ASIGNACION` INT(11) NOT NULL COMMENT 'Clave secundaria para identificar la asignación de producto',
-	`CODIGO_PROVEEDOR` INT(11) NOT NULL COMMENT 'Clave secundaria para identificar al proveedor',
-	PRIMARY KEY (`CODIGO_INVENTARIO`),
-	FOREIGN KEY (`CODIGO_ASIGNACION`) REFERENCES `ASIGNACION_PRODUCTO` (`CODIGO_ASIGNACION`),
-	FOREIGN KEY (`CODIGO_PROVEEDOR`) REFERENCES `PROVEEDOR` (`CODIGO_PROVEEDOR`)
-)ENGINE=INNODB DEFAULT CHARSET=UTF8 COLLATE=UTF8_SPANISH_CI;
+--
+-- Indices de la tabla `inventario`
+--
+ALTER TABLE `inventario`
+  ADD PRIMARY KEY (`CODIGO_INVENTARIO`),
+  ADD KEY `CODIGO_PRODUCTO` (`CODIGO_PRODUCTO`),
+  ADD KEY `CODIGO_PROVEEDOR` (`CODIGO_PROVEEDOR`);
 
-/*-------------------------------------------------------------------------------------------------------------------------*/
+--
+-- Indices de la tabla `oferta`
+--
+ALTER TABLE `oferta`
+  ADD PRIMARY KEY (`CODIGO_OFERTA`),
+  ADD KEY `CODIGO_PRODUCTO` (`CODIGO_PRODUCTO`);
 
-CREATE TABLE DETALLE_INVENTARIO (
-	`CODIGO_DETALLE` INT(11) NOT NULL AUTO_INCREMENT COMMENT 'Clave primaria para identificar el detalle de inventario, identificador único',
-	`CODIGO_VENTA` INT(11) NOT NULL COMMENT 'Clave secundaria para identificar la venta que se está realizando', 
-	`CODIGO_INVENTARIO` INT(11) NOT NULL COMMENT 'Clave secundaria para identificar el producto que se encuentra en inventario y póder descontarlo del inventario al hacer la venta',
-	PRIMARY KEY (`CODIGO_DETALLE`),
-	FOREIGN KEY (`CODIGO_VENTA`) REFERENCES `VENTA` (`CODIGO_VENTA`),
-	FOREIGN KEY (`CODIGO_INVENTARIO`) REFERENCES `INVENTARIO` (`CODIGO_INVENTARIO`)
-)ENGINE=INNODB DEFAULT CHARSET=UTF8 COLLATE=UTF8_SPANISH_CI;
+--
+-- Indices de la tabla `pedido`
+--
+ALTER TABLE `pedido`
+  ADD PRIMARY KEY (`NO_ORDEN`),
+  ADD KEY `CODIGO_PROVEEDOR` (`CODIGO_PROVEEDOR`);
 
-/*-------------------------------------------------------------------------------------------------------------------------*/
+--
+-- Indices de la tabla `presentacion`
+--
+ALTER TABLE `presentacion`
+  ADD PRIMARY KEY (`CODIGO_PRESENTACION`);
 
-INSERT INTO INVENTARIO (CODIGO_INVENTARIO, CODIGO_BARRAS, FECHA_INGRESO, CADUCIDAD, PRECIO_COMPRA, PRECIO_VENTA, CANTIDAD_PRODUCTO, CODIGO_ASIGNACION, CODIGO_PROVEEDOR) 
-VALUE (1, 123456, TR_TO_DATE('2021-10-01','%Y-%m-%d'), STR_TO_DATE('2021-10-25','%Y-%m-%d'), 10.00, 12.00, 5, 1, 1);
-INSERT INTO INVENTARIO (CODIGO_INVENTARIO, CODIGO_BARRAS, FECHA_INGRESO, CADUCIDAD, PRECIO_COMPRA, PRECIO_VENTA, CANTIDAD_PRODUCTO, CODIGO_ASIGNACION, CODIGO_PROVEEDOR) 
-VALUE (2, 125286, TR_TO_DATE('2021-10-24','%Y-%m-%d'), STR_TO_DATE('2021-10-31','%Y-%m-%d'), 15.00, 18.00, 10, 2, 2);
+--
+-- Indices de la tabla `producto`
+--
+ALTER TABLE `producto`
+  ADD PRIMARY KEY (`CODIGO_PRODUCTO`),
+  ADD KEY `CODIGO_PRESENTACION` (`CODIGO_PRESENTACION`),
+  ADD KEY `CODIGO_CLASIFICACION` (`CODIGO_CLASIFICACION`),
+  ADD KEY `CODIGO_TIPO` (`CODIGO_TIPO`);
 
-INSERT INTO INVENTARIO (CODIGO_INVENTARIO, CODIGO_BARRAS, FECHA_INGRESO, CADUCIDAD, PRECIO_COMPRA, PRECIO_VENTA, CANTIDAD_PRODUCTO, CODIGO_ASIGNACION, CODIGO_PROVEEDOR) 
-VALUE (3, 985632, STR_TO_DATE('2021-10-02','%Y-%m-%d'), STR_TO_DATE('2021-11-02','%Y-%m-%d'), 14.00, 20.00, 10, 3, 3);
+--
+-- Indices de la tabla `proveedor`
+--
+ALTER TABLE `proveedor`
+  ADD PRIMARY KEY (`CODIGO_PROVEEDOR`);
 
+--
+-- Indices de la tabla `rol`
+--
+ALTER TABLE `rol`
+  ADD PRIMARY KEY (`CODIGO_ROL`);
 
+--
+-- Indices de la tabla `tipo_producto`
+--
+ALTER TABLE `tipo_producto`
+  ADD PRIMARY KEY (`CODIGO_TIPO`);
 
+--
+-- Indices de la tabla `usuario`
+--
+ALTER TABLE `usuario`
+  ADD PRIMARY KEY (`CODIGO_USUARIO`),
+  ADD KEY `CODIGO_ROL` (`CODIGO_ROL`);
 
+--
+-- Indices de la tabla `venta`
+--
+ALTER TABLE `venta`
+  ADD PRIMARY KEY (`CODIGO_VENTA`),
+  ADD KEY `CODIGO_CLIENTE` (`CODIGO_CLIENTE`),
+  ADD KEY `CODIGO_USUARIO` (`CODIGO_USUARIO`);
 
+--
+-- AUTO_INCREMENT de las tablas volcadas
+--
 
+--
+-- AUTO_INCREMENT de la tabla `asignacion_clasificacion`
+--
+ALTER TABLE `asignacion_clasificacion`
+  MODIFY `idAsignacionClasificacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT de la tabla `clasificacion`
+--
+ALTER TABLE `clasificacion`
+  MODIFY `CODIGO_CLASIFICACION` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Clave primaria de la clasificación del producto, identificador único', AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT de la tabla `cliente`
+--
+ALTER TABLE `cliente`
+  MODIFY `CODIGO_CLIENTE` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Clave primari del cliente, identificador único', AUTO_INCREMENT=11111112;
+
+--
+-- AUTO_INCREMENT de la tabla `contacto_cliente`
+--
+ALTER TABLE `contacto_cliente`
+  MODIFY `CODIGO_CONTACTO_C` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Clave primaria del contacto del cliente, identificador único', AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT de la tabla `contacto_proveedor`
+--
+ALTER TABLE `contacto_proveedor`
+  MODIFY `CODIGO_CONTACTO_P` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Clave primaria del contacto del proveedor, identificador único', AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT de la tabla `detalle`
+--
+ALTER TABLE `detalle`
+  MODIFY `CODIGO_DETALLE` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Clave primaria para identificar el detalle de inventario, identificador único', AUTO_INCREMENT=28;
+
+--
+-- AUTO_INCREMENT de la tabla `detalle_pedido`
+--
+ALTER TABLE `detalle_pedido`
+  MODIFY `CODIGO_DETALLE_PEDIDO` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Clave primaria para identificar el pedido y los productos, identificador único', AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT de la tabla `inventario`
+--
+ALTER TABLE `inventario`
+  MODIFY `CODIGO_INVENTARIO` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Clave primaria para identificar el inventario, identificador único', AUTO_INCREMENT=18;
+
+--
+-- AUTO_INCREMENT de la tabla `oferta`
+--
+ALTER TABLE `oferta`
+  MODIFY `CODIGO_OFERTA` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Clave primaria para la oferta, identificador único', AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT de la tabla `pedido`
+--
+ALTER TABLE `pedido`
+  MODIFY `NO_ORDEN` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Clave primaria para distinguir los pedidos, identificador único', AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT de la tabla `presentacion`
+--
+ALTER TABLE `presentacion`
+  MODIFY `CODIGO_PRESENTACION` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Clave primaria de la presentación del producto, identificador único', AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT de la tabla `producto`
+--
+ALTER TABLE `producto`
+  MODIFY `CODIGO_PRODUCTO` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Clave primaria del producto, identificador único', AUTO_INCREMENT=17;
+
+--
+-- AUTO_INCREMENT de la tabla `proveedor`
+--
+ALTER TABLE `proveedor`
+  MODIFY `CODIGO_PROVEEDOR` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Clave primaria del proveedor, identificador único', AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT de la tabla `rol`
+--
+ALTER TABLE `rol`
+  MODIFY `CODIGO_ROL` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Clave primaria para los roles que existiran en el sistema, identificador único', AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT de la tabla `tipo_producto`
+--
+ALTER TABLE `tipo_producto`
+  MODIFY `CODIGO_TIPO` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Clave primaria del tipo de producto, identificador único', AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `usuario`
+--
+ALTER TABLE `usuario`
+  MODIFY `CODIGO_USUARIO` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Clave primaria para el usuario, identificador único', AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT de la tabla `venta`
+--
+ALTER TABLE `venta`
+  MODIFY `CODIGO_VENTA` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Clave primaria para identificar las ventas realizadas, identificador único', AUTO_INCREMENT=35;
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `asignacion_clasificacion`
+--
+ALTER TABLE `asignacion_clasificacion`
+  ADD CONSTRAINT `asignacion_clasificacion_ibfk_1` FOREIGN KEY (`CODIGO_PRODUCTO`) REFERENCES `producto` (`CODIGO_PRODUCTO`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `asignacion_clasificacion_ibfk_2` FOREIGN KEY (`CODIGO_CLASIFICACION`) REFERENCES `clasificacion` (`CODIGO_CLASIFICACION`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `contacto_cliente`
+--
+ALTER TABLE `contacto_cliente`
+  ADD CONSTRAINT `contacto_cliente_ibfk_1` FOREIGN KEY (`CODIGO_CLIENTE`) REFERENCES `cliente` (`CODIGO_CLIENTE`);
+
+--
+-- Filtros para la tabla `contacto_proveedor`
+--
+ALTER TABLE `contacto_proveedor`
+  ADD CONSTRAINT `contacto_proveedor_ibfk_1` FOREIGN KEY (`CODIGO_PROVEEDOR`) REFERENCES `proveedor` (`CODIGO_PROVEEDOR`);
+
+--
+-- Filtros para la tabla `detalle`
+--
+ALTER TABLE `detalle`
+  ADD CONSTRAINT `detalle_ibfk_1` FOREIGN KEY (`CODIGO_VENTA`) REFERENCES `venta` (`CODIGO_VENTA`),
+  ADD CONSTRAINT `detalle_ibfk_2` FOREIGN KEY (`CODIGO_INVENTARIO`) REFERENCES `inventario` (`CODIGO_INVENTARIO`);
+
+--
+-- Filtros para la tabla `detalle_pedido`
+--
+ALTER TABLE `detalle_pedido`
+  ADD CONSTRAINT `detalle_pedido_ibfk_1` FOREIGN KEY (`NO_ORDEN`) REFERENCES `pedido` (`NO_ORDEN`),
+  ADD CONSTRAINT `detalle_pedido_ibfk_2` FOREIGN KEY (`CODIGO_PRODUCTO`) REFERENCES `producto` (`CODIGO_PRODUCTO`);
+
+--
+-- Filtros para la tabla `inventario`
+--
+ALTER TABLE `inventario`
+  ADD CONSTRAINT `inventario_ibfk_1` FOREIGN KEY (`CODIGO_PRODUCTO`) REFERENCES `producto` (`CODIGO_PRODUCTO`),
+  ADD CONSTRAINT `inventario_ibfk_2` FOREIGN KEY (`CODIGO_PROVEEDOR`) REFERENCES `proveedor` (`CODIGO_PROVEEDOR`);
+
+--
+-- Filtros para la tabla `oferta`
+--
+ALTER TABLE `oferta`
+  ADD CONSTRAINT `oferta_ibfk_1` FOREIGN KEY (`CODIGO_PRODUCTO`) REFERENCES `producto` (`CODIGO_PRODUCTO`);
+
+--
+-- Filtros para la tabla `pedido`
+--
+ALTER TABLE `pedido`
+  ADD CONSTRAINT `pedido_ibfk_1` FOREIGN KEY (`CODIGO_PROVEEDOR`) REFERENCES `proveedor` (`CODIGO_PROVEEDOR`);
+
+--
+-- Filtros para la tabla `producto`
+--
+ALTER TABLE `producto`
+  ADD CONSTRAINT `producto_ibfk_1` FOREIGN KEY (`CODIGO_PRESENTACION`) REFERENCES `presentacion` (`CODIGO_PRESENTACION`),
+  ADD CONSTRAINT `producto_ibfk_3` FOREIGN KEY (`CODIGO_TIPO`) REFERENCES `tipo_producto` (`CODIGO_TIPO`);
+
+--
+-- Filtros para la tabla `usuario`
+--
+ALTER TABLE `usuario`
+  ADD CONSTRAINT `usuario_ibfk_1` FOREIGN KEY (`CODIGO_ROL`) REFERENCES `rol` (`CODIGO_ROL`);
+
+--
+-- Filtros para la tabla `venta`
+--
+ALTER TABLE `venta`
+  ADD CONSTRAINT `venta_ibfk_1` FOREIGN KEY (`CODIGO_CLIENTE`) REFERENCES `cliente` (`CODIGO_CLIENTE`),
+  ADD CONSTRAINT `venta_ibfk_2` FOREIGN KEY (`CODIGO_USUARIO`) REFERENCES `usuario` (`CODIGO_USUARIO`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

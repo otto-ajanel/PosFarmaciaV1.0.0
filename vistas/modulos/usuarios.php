@@ -47,11 +47,11 @@ if($_SESSION["perfil"] == "Especial" || $_SESSION["perfil"] == "Vendedor"){
 
       </div>
 
-      <div class="box-body">
+      <div class="box-body ">
 
-       <table class="table table-bordered table-striped dt-responsive tablas" width="100%">
+       <table class="table table-bordered table-striped dt-responsive tablas fixed_header" width="100%">
 
-        <thead>
+        <thead >
 
          <tr>
 
@@ -66,9 +66,9 @@ if($_SESSION["perfil"] == "Especial" || $_SESSION["perfil"] == "Vendedor"){
 
          </tr>
 
-        </thead>
+        </thead >
 
-        <tbody>
+        <tbody >
 
         <?php
 
@@ -246,11 +246,11 @@ MODAL AGREGAR USUARIO
 
               <input type="file" class="nuevaFoto" name="nuevaFoto">
 
-              <p class="help-block">Peso máximo de la foto 2MB</p>
+              <p class="help-block">Peso máximo de la foto 8MB</p>
 
               <img src="vistas/img/usuarios/default/anonymous.png" class="img-thumbnail previsualizar" width="100px">
 
-            </div>
+              </div>
 
           </div>
 

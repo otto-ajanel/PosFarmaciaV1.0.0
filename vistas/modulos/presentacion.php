@@ -106,7 +106,7 @@ MODAL AGREGAR PRESENTACION
 
               <div class="input-group">
 
-                <span class="input-group-addon"><i class="fa fab fa-joomla"></i></span>
+                <span class="input-group-addon"><i class=" fa fab fa-joomla"></i></span>
 
                 <input type="text" class="form-control input-lg" name="nuevaPresentacion" placeholder="Ingresar Presentación" required>
 
@@ -183,7 +183,7 @@ MODAL EDITAR Presentacion
 
               <div class="input-group">
 
-                <span class="input-group-addon"><i class="fa fab fa-joomla"></i></span>
+                <span class="input-group-addon"><i class=" fa fab fa-joomla"></i></span>
 
                 <input type="text" class="form-control input-lg" name="editarPresentacion" id="editarPresentacion" required>
 

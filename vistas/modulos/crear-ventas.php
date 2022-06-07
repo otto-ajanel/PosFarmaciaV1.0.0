@@ -10,9 +10,9 @@
 
         <ol class="breadcrumb">
 
-            <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
+            <li><a href="inicio"><i class="ion-navicon-round"></i> INICIO</a></li>
 
-            <button id="ver-ventas" class="ver-ventas"class="btn btn-default btn-xs" data-toggle="modal" data-target="#modalMostrarVentasHoy" data-dismiss="modal">Ver Ventas</button>
+            <button id="ver-ventas" class="ver-ventas btn btn-primary" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modalMostrarVentasHoy" data-dismiss="modal">Ver Ventas</button>
 
         </ol>
 
@@ -46,39 +46,34 @@
                                     <div class="input-group">
 
                                         <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                                        <input type="text" class="form-control" id="nuevoVendedor"
-                                            value="<?php echo $_SESSION["nombre"]; ?>" readonly>
+                                        <input type="text" class="form-control" id="nuevoVendedor" value="<?php echo $_SESSION["nombre"]; ?>" readonly>
                                         <input type="hidden" name="idVendedor" value="<?php echo $_SESSION["id"]; ?>">
 
 
                                         <span class="input-group-addon"><i class="fa fa-key"></i></span>
                                         <?php
 
-                    $item = null;
-                    $valor = null;
+                                        $item = null;
+                                        $valor = null;
 
-                    $ventas = ControladorVentas::ctrUltimaVenta($item, $valor);
-                    if(!$ventas){
+                                        $ventas = ControladorVentas::ctrUltimaVenta($item, $valor);
+                                        if (!$ventas) {
 
-                      echo '<input type="text" class="form-control" id="nuevaVenta" name="nuevaVenta" value="00001" readonly>';
+                                            echo '<input type="text" class="form-control" id="nuevaVenta" name="nuevaVenta" value="00001" readonly>';
+                                        } else {
 
-
-                    }else{
-
-                      foreach ($ventas as $key => $value) {
-                          # code...
-                          $codigo = $value["NO_FACTURA"] + 1;
-                      }
+                                            foreach ($ventas as $key => $value) {
+                                                # code...
+                                                $codigo = $value["NO_FACTURA"] + 1;
+                                            }
 
 
 
 
-                      echo '<input type="text" class="form-control" id="nuevaVenta" name="nuevaVenta" value="'."No. 0000".$codigo.'" readonly>';
+                                            echo '<input type="text" class="form-control" id="nuevaVenta" name="nuevaVenta" value="' . "No. 0000" . $codigo . '" readonly>';
+                                        }
 
-
-                    }
-
-                    ?>
+                                        ?>
                                     </div>
                                     <div class="input-group">
 
@@ -101,23 +96,21 @@
                                         <span class="input-group-addon"><i class="fa fa-users"></i></span>
 
                                         <select class="form-control" id="seleccionarCliente" name="seleccionarCliente">
-                                             <option value="">Seleccionar cliente</option>
-                                             <?php
-                                             $item=null;
-                                             $valor=null;
-                                             $res=ControladorCliente::ctrMostrarCliente($item,$valor);
-                                             foreach ($res as $key => $value) {
-                                                 echo '
-                                                 <option value="'.$value["CODIGO_CLIENTE"].'">'.$value["NOMBRE_CLIENTE"]."--".$value["NIT"].'</option>
+                                            <option value="">Seleccionar cliente</option>
+                                            <?php
+                                            $item = null;
+                                            $valor = null;
+                                            $res = ControladorCliente::ctrMostrarCliente($item, $valor);
+                                            foreach ($res as $key => $value) {
+                                                echo '
+                                                 <option value="' . $value["CODIGO_CLIENTE"] . '">' . $value["NOMBRE_CLIENTE"] . "--" . $value["NIT"] . '</option>
                                                  ';
-                                             }
+                                            }
 
-                                             ?>
+                                            ?>
                                         </select>
 
-                                        <span class="input-group-addon"><button type="button"
-                                                class="btn btn-default btn-xs" data-toggle="modal"
-                                                data-target="#modalAgregarCliente" data-dismiss="modal">Agregar
+                                        <span class="input-group-addon"><button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modalAgregarCliente" data-dismiss="modal">Agregar
                                                 cliente</button></span>
 
                                     </div>
@@ -165,9 +158,7 @@
                                                                 <i>Q</i>
                                                             </span>
 
-                                                            <input type="text" class="form-control input-lg"
-                                                                id="nuevoTotalVenta" name="nuevoTotalVenta" total=""
-                                                                placeholder="00000" readonly required>
+                                                            <input type="text" class="form-control input-lg" id="nuevoTotalVenta" name="nuevoTotalVenta" total="" placeholder="00000" readonly required>
 
                                                             <input type="hidden" name="totalVenta" id="totalVenta">
 
@@ -197,10 +188,9 @@
 
                                         <div class="input-group">
 
-                                            <select class="form-control" id="nuevoMetodoPago" name="nuevoMetodoPago"
-                                                required>
+                                            <select class="form-control" id="nuevoMetodoPago" name="nuevoMetodoPago" required>
                                                 <option value="">Seleccione método de pago</option>
-                                                <option value="Efectivo">Efectivo</option>
+                                                <option value="Efectivo" selected>Efectivo</option>
                                                 <option value="TC">Tarjeta Crédito</option>
                                                 <option value="TD">Tarjeta Débito</option>
                                             </select>
@@ -229,7 +219,7 @@
 
                     </form>
                     <?php
-                    $newSale=new ControladorVentas();
+                    $newSale = new ControladorVentas();
                     $newSale->ctrCrearVenta();
                     ?>
                 </div>
@@ -255,7 +245,7 @@
                                 <tr>
                                     <th style="width: 10px">#</th>
                                     <th>Imagen</th>
-                                    <th>Codigo Barra</th>
+                                    <!-- <th>Codigo Barra</th> -->
                                     <th>Nombre</th>
                                     <th>Descripcion</th>
                                     <th>Stock</th>
@@ -284,66 +274,66 @@
 MODAL AGREGAR CLIENTE
 ======================================-->
 <div id="modalAgregarCliente" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <form role="form" method="post">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form role="form" method="post">
 
-        <!--=====================================
+                <!--=====================================
         CABEZA DEL MODAL
         ======================================-->
-        <div class="modal-header" style="background:#3c8dbc; color:white">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Agregar cliente</h4>
-        </div>
+                <div class="modal-header" style="background:#3c8dbc; color:white">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Agregar cliente</h4>
+                </div>
 
-        <!--=====================================
+                <!--=====================================
         CUERPO DEL MODAL
         ======================================-->
-        <div class="modal-body">
-          <div class="box-body">
+                <div class="modal-body">
+                    <div class="box-body">
 
-            <!-- ENTRADA PARA EL NOMBRE -->
-            <div class="form-group">
-              <div class="input-group">
-                <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                <input type="text" class="form-control input-lg" name="nuevoCliente" placeholder="Ingresar nombre" required>
-              </div>
-            </div>
+                        <!-- ENTRADA PARA EL NOMBRE -->
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                <input type="text" class="form-control input-lg" name="nuevoCliente" placeholder="Ingresar nombre" required>
+                            </div>
+                        </div>
 
-            <!-- ENTRADA PARA EL NIT -->
-            <div class="form-group">
-              <div class="input-group">
-                <span class="input-group-addon"><i class="fa fa-key"></i></span>
-                <input type="text" min="0" class="form-control input-lg" name="nuevoNit" placeholder="Ingresar NIT" required>
-              </div>
-            </div>
+                        <!-- ENTRADA PARA EL NIT -->
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-key"></i></span>
+                                <input type="text" min="0" class="form-control input-lg" name="nuevoNit" placeholder="Ingresar NIT" required>
+                            </div>
+                        </div>
 
-            <!-- ENTRADA PARA LA DIRECCIÓN -->
-            <div class="form-group">
-              <div class="input-group">
-                <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
-                <input type="text" class="form-control input-lg" name="nuevaDireccion" placeholder="Ingresar dirección" required>
-              </div>
-            </div>
+                        <!-- ENTRADA PARA LA DIRECCIÓN -->
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
+                                <input type="text" class="form-control input-lg" name="nuevaDireccion" placeholder="Ingresar dirección" required>
+                            </div>
+                        </div>
 
-          </div>
-        </div>
-        <!--=====================================
+                    </div>
+                </div>
+                <!--=====================================
         PIE DEL MODAL
         ======================================-->
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Salir</button>
-          <button type="submit" class="btn btn-primary">Guardar cliente</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Salir</button>
+                    <button type="submit" class="btn btn-primary">Guardar cliente</button>
+                </div>
+            </form>
+
+            <?php
+            $crearCliente = new ControladorCliente();
+            $crearCliente->ctrCrearCliente();
+            ?>
+
         </div>
-      </form>
-
-      <?php
-        $crearCliente = new ControladorCliente();
-        $crearCliente -> ctrCrearCliente();
-      ?>
-
     </div>
-  </div>
 </div>
 
 
@@ -352,42 +342,45 @@ MODAL AGREGAR CLIENTE
 MODAL AGREGAR CLIENTE
 ======================================-->
 <div id="modalMostrarVentasHoy" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">
+    <div class="modal-dialog">
+        <div class="modal-content">
 
-    <div class="modal-header" style="background:#3c8dbc; color:white">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Agregar cliente</h4>
-        </div>
+            <div class="modal-header" style="background:#3c8dbc; color:white">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Ventas de este dia</h4>
+            </div>
 
-        <!--=====================================
+            <!--=====================================
         CUERPO DEL MODAL
         ======================================-->
-        <table class="table table-bordered table-striped dt-responsive tablaVentasHoy" style="width: 100%;">
+            <table class="table table-bordered table-striped dt-responsive tablaVentasHoy" style="width: 100%;">
 
-<thead>
+                <thead>
 
-    <tr>
-        <th style="width: 10px">#No.</th>
-        <th>No. Factura</th>
-        <th>Vendedor</th>
-        <th>Nombre del cliente</th>
-        <th>Total de Venta</th>
-    </tr>
+                    <tr>
+                        <th style="width: 10px">#No.</th>
+                        <th>No. Factura</th>
+                        <th>Vendedor</th>
+                        <th>Nombre del cliente</th>
+                        <th>Total de Venta</th>
+                        <th>Acciones</th>
+                    </tr>
 
-</thead>
+                </thead>
+            </table>
 
-
-</table>
-
-        <!--=====================================
+            <!--=====================================
         PIE DEL MODAL
         ======================================-->
-        <div class="modal-footer">
+            <div class="modal-footer">
+
+            </div>
 
         </div>
-
     </div>
-  </div>
 </div>
+<?php
 
+$eliminarV = new ControladorVentas();
+$eliminarV->ctrEliminarVenta();
+?>

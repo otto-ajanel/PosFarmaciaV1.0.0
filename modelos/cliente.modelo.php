@@ -130,5 +130,19 @@ static public function mdlEliminarCliente($tabla, $datos){
 	}
 	$stmt -> close();
 	$stmt = null;
+
 }
+
+static public function mdlEliminarContacto($tabla, $datos){
+	$stmt = Conexion::conectar()->prepare("DELETE FROM $tabla WHERE CODIGO_CONTACTO_C = :idCliente");
+	$stmt -> bindParam(":idCliente", $datos, PDO::PARAM_INT);
+	if($stmt -> execute()){
+		return "ok";
+	}else{
+		return "error";
+	}
+	$stmt -> close();
+	$stmt = null;
+}
+
 }

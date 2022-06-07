@@ -221,4 +221,35 @@ class ControladorCliente{
 			}
 		}
 	}
+
+	/*=============================================
+	ELIMINAR CLIENTE
+	=============================================*/
+	static public function ctrEliminarContacto(){
+
+		if(isset($_GET["idContacto"])){
+			$tabla ="contacto_cliente";
+			$datos = $_GET["idContacto"];
+			$respuesta = ModeloCliente::mdlEliminarContacto($tabla, $datos);
+
+			if($respuesta == "ok"){
+				echo'<script>
+				swal({
+					  type: "success",
+					  title: "El cliente ha sido borrado correctamente",
+					  showConfirmButton: true,
+					  confirmButtonText: "Cerrar",
+					  closeOnConfirm: false
+					  }).then(function(result){
+								if (result.value) {
+
+								window.location = "cliente";
+								}
+							})
+
+				</script>';
+
+			}
+		}
+	}
 }

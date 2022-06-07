@@ -1,6 +1,5 @@
 /*=============================================
 EDITAR CLIENTE
-esto los que hace para los clientes
 =============================================*/
 
 $(".tablas").on("click", ".btnEditarCliente", function(){
@@ -73,6 +72,8 @@ $(".tablas").on("click", ".btnContactoCliente", function(){
   	})
 })
 
+
+
 $(".tablas").on("click", ".btnListarContactos", function(){
 
 	var idCliente = $(this).attr("idListarContacto");
@@ -88,6 +89,7 @@ $(".tablas").on("click", ".btnListarContactos", function(){
       processData: false,
       dataType:"json",
       success:function(respuesta){
+        
 				try {
 					$("#idListarContacto").val(respuesta[0]["CODIGO_CLIENTE"]);
  				 	$("#listarNombreCliente").val(respuesta[0]["NOMBRE_CLIENTE"]);
@@ -105,10 +107,17 @@ $(".tablas").on("click", ".btnListarContactos", function(){
 
 function createRowContact(item) {
 	var tbl = document.getElementById("Listacontactos");
+  var button= document.createElement("button");
+  button.innerHTML="Ellimnar";
+  
 	if (item[7] != null){
 		tr = tbl.insertRow();
 		var td = tr.insertCell();
+    var td2 =tr.insertCell();
 		td.appendChild(document.createTextNode(item[7]));
+    button.setAttribute("class","btn btn-danger btnEliminarContcto");
+    button.setAttribute("idContacto",item[5]);
+    td2.appendChild(button);
 	}
 	else {
 		tr = tbl.insertRow();
@@ -116,3 +125,12 @@ function createRowContact(item) {
 		td.appendChild(document.createTextNode('No tiene ningún número de teléfono'));
 	}
 }
+/*=============================================
+ELIMINAR contacto
+=============================================*/
+$(".btnEliminarContcto").click(function(){
+
+
+
+	
+})

@@ -25,14 +25,16 @@ class TablaVentas{
 		  "data": [';
 
 		  for($i = 0; $i < count($ventas); $i++){
-			
+			$botones =  "<div class='btn-group'><button class='btn btn-danger eliminarVenta' idVenta='".$ventas[$i]["CODIGO_VENTA"]."'>Eliminar Venta</button></div>";
+
 		  	$datosJson .='[
 			      "'.($i+1).'",
 			      
 			      "'.$ventas[$i]["NO_FACTURA"].'",
 			      "'.$ventas[$i]["NOMBRE"].'",
 			      "'.$ventas[$i]["NOMBRE_CLIENTE"].'",
-			      "'.$ventas[$i]["Total"].'"
+			      "'.$ventas[$i]["Total"].'",
+				  "'.$botones.'"
 				  
 			    ],';
 

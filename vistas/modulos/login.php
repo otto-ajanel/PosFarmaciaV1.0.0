@@ -7,14 +7,18 @@
   </div>
   <div class="login-content">
     <div class="img">
-      <img src="vistas\dist\img\iconos\LoginChica.jpeg" alt="login" width="600px">
+      <img src="vistas\dist\img\iconos\LoginChica.png" alt="login" width="600px"   style="margin-left: 100px;">
     </div>
     <div class="login-box">
     
-      <div class="login-box-body">
+      <div class="login-box-body"  >
 
-        <p class="login-box-msg">Ingresar Credenciales</p>
-        <img src="vistas\dist\img\iconos\Login.PNG" alt="Credenciales">
+        <p class="login-box-msg"
+        style="margin-top:35px;"
+        >Ingresar Credenciales</p>
+        <img src="vistas\dist\img\iconos\Login.PNG" alt="Credenciales"
+     
+        >
 
         <form method="post">
 
@@ -41,6 +45,8 @@
                       style="
                       letter-spacing: 4px;
                       text-transform: uppercase;
+                      margin-top:15px;
+                      margin-bottom:25px;
                       "
               >Ingresar</button>
             

@@ -1,68 +1,157 @@
 <?php
-class ControladorProducto{
+class ControladorProducto
+{
 
 	/*=============================================
 	CREAR PRODUCTO
 	=============================================*/
 
-	static public function ctrCrearProducto(){
+	static public function ctrCrearProducto()
+	{
 
-		if( isset($_POST["nuevoNombreGenerico"]) &&
-			isset($_POST["nuevoNombreComercial"]) &&
-			isset($_POST["nuevoStockMinimo"]) &&
-		    isset($_POST["nuevoStockMaximo"]) &&
-			isset($_POST["nuevoCodigoBarras"])){
+		if(isset($_POST["nuevoNombreGenerico"]) 
+		 /* isset($_POST["nuevoCodigoBarras"])*/)
+		 {
+			 
+			 if(preg_match('/^[a-zA-Z-ñÑáéíóúÁÉÍÓÚ ]+$/', $_POST["nuevoNombreGenerico"]) &&
+			 preg_match('/^[a-zA-Z-ñÑáéíóúÁÉÍÓÚ ]+$/', $_POST["nuevoNombreComercial"]) &&
+			 preg_match('/^[0-9.]+$/', $_POST["nuevoStockMinimo"]) &&
+			 preg_match('/^[0-9. ]+$/', $_POST["nuevoStockMaximo"] &&
+			$_POST["clasificacionProducto"])
+			 /*preg_match('/^[0-9. ]+$/', $_POST["nuevoCodigoBarras"])*/)
+			 {
+				$clasificaciones=$_POST["clasificacionProducto"];
+				$ruta = "vistas/img/productos/default/anonymous.png";
 
-			if( preg_match('/^[a-zA-Z-ñÑáéíóúÁÉÍÓÚ ]+$/', $_POST["nuevoNombreGenerico"]) &&
-				preg_match('/^[a-zA-Z-ñÑáéíóúÁÉÍÓÚ ]+$/', $_POST["nuevoNombreComercial"]) &&
-			    preg_match('/^[0-9.]+$/', $_POST["nuevoStockMinimo"]) &&
-			    preg_match('/^[0-9. ]+$/', $_POST["nuevoStockMaximo"]) &&
-				preg_match('/^[0-9. ]+$/', $_POST["nuevoCodigoBarras"])){
 
-			   	$tabla = "PRODUCTO";
-			   	$datos = array( "CODIGO_BARRAS"=>$_POST["nuevoCodigoBarras"],
-					   			"NOMBRE_GENERICO"=>$_POST["nuevoNombreGenerico"],
-								"NOMBRE_COMERCIAL"=>$_POST["nuevoNombreComercial"],
-								"CODIGO_PRESENTACION"=>$_POST["presentacionProducto"],
-								"CODIGO_CLASIFICACION"=>$_POST["clasificacionProducto"],
-								"CODIGO_TIPO"=>$_POST["tipoproductoProducto"],
-								"STOCK_MIN"=>$_POST["nuevoStockMinimo"],
-								"STOCK_MAX"=>$_POST["nuevoStockMaximo"]);
+				if(isset($_FILES["nuevaFotoProducto"]["tmp_name"]))
+				{
 
-			   	$respuesta = ModeloProducto::mdlIngresarProducto($tabla, $datos);
+					
+				
+					
+					list($ancho, $alto) = getimagesize($_FILES["nuevaFotoProducto"]["tmp_name"]);
 
-			   	if($respuesta == "ok"){
-					echo'<script>
+					$nuevoAncho = 500;
+					$nuevoAlto = 500;
 
-					swal({
-						  type: "success",
-						  title: "El producto ha sido guardado correctamente",
-						  showConfirmButton: true,
-						  confirmButtonText: "Cerrar"
-						  }).then(function(result){
-									if (result.value) {
+					/*=============================================
+					CREAMOS EL DIRECTORIO DONDE VAMOS A GUARDAR LA FOTO DEL USUARIO
+					=============================================*/
 
-									window.location = "producto";
-									}
-								})
-					</script>';
+					$directorio = "vistas/img/productos/".$_POST["nuevoNombreGenerico"];
+
+					mkdir($directorio, 0755);
+
+					/*=============================================
+					DE ACUERDO AL TIPO DE IMAGEN APLICAMOS LAS FUNCIONES POR DEFECTO DE PHP
+					=============================================*/
+
+					if($_FILES["nuevaFotoProducto"]["type"] == "image/jpeg")
+					{
+
+						/*=============================================
+						GUARDAMOS LA IMAGEN EN EL DIRECTORIO
+						=============================================*/
+
+						$aleatorio = mt_rand(100,999);
+
+						$ruta = "vistas/img/productos/".$_POST["nuevoNombreGenerico"]."/".$aleatorio.".jpg";
+
+						$origen = imagecreatefromjpeg($_FILES["nuevaFotoProducto"]["tmp_name"]);						
+
+						$destino = imagecreatetruecolor($nuevoAncho, $nuevoAlto);
+
+						imagecopyresized($destino, $origen, 0, 0, 0, 0, $nuevoAncho, $nuevoAlto, $ancho, $alto);
+
+						imagejpeg($destino, $ruta);
+
+					}
+
+					if($_FILES["nuevaFoto"]["type"] == "image/png")
+					{
+
+						/*=============================================
+						GUARDAMOS LA IMAGEN EN EL DIRECTORIO
+						=============================================*/
+
+						$aleatorio = mt_rand(100,999);
+
+						$ruta = "vistas/img/productos/".$_POST["nuevoNombreGenerico"]."/".$aleatorio.".png";
+
+						$origen = imagecreatefrompng($_FILES["nuevaFoto"]["tmp_name"]);						
+
+						$destino = imagecreatetruecolor($nuevoAncho, $nuevoAlto);
+
+						imagecopyresized($destino, $origen, 0, 0, 0, 0, $nuevoAncho, $nuevoAlto, $ancho, $alto);
+
+						imagepng($destino, $ruta);
+
+					}
 				}
 
-			}else{
-				echo'<script>
-					swal({
-						  type: "error",
-						  title: "¡El producto no puede ir vacío o llevar caracteres especiales!",
-						  showConfirmButton: true,
-						  confirmButtonText: "Cerrar"
-						  }).then(function(result){
-							if (result.value) {
-							window.location = "producto";
-							}
-						})
-			  	</script>';
+				
+				
+
+					$tabla = "PRODUCTO";
+					$datos = array(
+													/* "CODIGO_BARRAS"=>$_POST["nuevoCodigoBarras"],*/
+													"NOMBRE_GENERICO"=>$_POST["nuevoNombreGenerico"],
+													"NOMBRE_COMERCIAL"=>$_POST["nuevoNombreComercial"],
+													"CODIGO_PRESENTACION"=>$_POST["presentacionProducto"],
+													"CODIGO_TIPO"=>$_POST["tipoproductoProducto"],
+													"STOCK_MIN"=>$_POST["nuevoStockMinimo"],
+													"UBICACION_PRODUCTO"=>$_POST["ubicacionProducto"],
+													"STOCK_MAX"=>$_POST["nuevoStockMaximo"],
+													"URL"=>$ruta);
+
+					$respuesta = ModeloProducto::mdlIngresarProducto($tabla, $datos);
+					
+					$asigProduct=intval($respuesta);
+
+					foreach ($clasificaciones as $key => $value) {
+						# code...
+						$asiagClasification=intval($value[0]);
+						$asignaciones= ModeloAsignacion::mdlAsignarProducto($asigProduct,$asiagClasification);
+					}
+
+					if($asignaciones == "ok"){
+						echo'<script>
+
+						swal({
+							type: "success",
+							title: "El producto ha sido guardado correctamente",
+							showConfirmButton: true,
+							confirmButtonText: "Cerrar"
+							}).then(function(result){
+										if (result.value) {
+
+										window.location = "producto";
+										}
+									})
+						</script>';
+					}
+					else
+					{
+					echo'<script>
+						swal({
+							type: "error",
+							title: "¡El producto no puede ir vacío o llevar caracteres especiales!",
+							showConfirmButton: true,
+							confirmButtonText: "Cerrar"
+							}).then(function(result){
+								if (result.value) {
+								window.location = "producto";
+								}
+							})
+					</script>';
+					}
+				
+
 			}
+
 		}
+		
 	}
 
 	/*=============================================
@@ -82,26 +171,26 @@ class ControladorProducto{
 		if(isset($_POST["editarNombreGenerico"]) &&
 			 isset($_POST["editarNombreComercial"]) &&
 			 isset($_POST["editarStockMinimo"]) &&
-			 isset($_POST["editarStockMaximo"]) &&
-			 isset($_POST["editarCodigoBarras"])){
+			 isset($_POST["editarStockMaximo"])
+		 /*isset($_POST["editarCodigoBarras"])*/){
 
 				if(preg_match('/^[a-zA-Z-ñÑáéíóúÁÉÍÓÚ ]+$/', $_POST["editarNombreGenerico"]) &&
 			     preg_match('/^[a-zA-Z-ñÑáéíóúÁÉÍÓÚ ]+$/', $_POST["editarNombreComercial"]) &&
 					 preg_match('/^[0-9.]+$/', $_POST["editarStockMinimo"]) &&
-					 preg_match('/^[0-9.]+$/', $_POST["editarStockMaximo"]) &&
-					 preg_match('/^[0-9. ]+$/', $_POST["editarCodigoBarras"])){
+					 preg_match('/^[0-9.]+$/', $_POST["editarStockMaximo"])
+   			/*	 preg_match('/^[0-9. ]+$/', $_POST["editarCodigoBarras"])*/){
 
 				$tabla = "PRODUCTO";
 
 				$datos = array("CODIGO_PRODUCTO"=>$_POST["idProducto"],
-								"CODIGO_BARRAS"=>$_POST["editarCodigoBarras"],
-								"NOMBRE_GENERICO"=>$_POST["editarNombreGenerico"],
-								"NOMBRE_COMERCIAL"=>$_POST["editarNombreComercial"],
-								"CODIGO_PRESENTACION"=>$_POST["editarpresentacionProducto"],
-								"CODIGO_CLASIFICACION"=>$_POST["editarclasificacionProducto"],
-								"CODIGO_TIPO"=>$_POST["editartipoproductoProducto"],
-								"STOCK_MIN"=>$_POST["editarStockMinimo"],
-								"STOCK_MAX"=>$_POST["editarStockMaximo"]);
+											/* "CODIGO_BARRAS"=>$_POST["editarCodigoBarras"],*/
+											 "NOMBRE_GENERICO"=>$_POST["editarNombreGenerico"],
+											 "NOMBRE_COMERCIAL"=>$_POST["editarNombreComercial"],
+											 "CODIGO_PRESENTACION"=>$_POST["editarpresentacionProducto"],
+											 "CODIGO_CLASIFICACION"=>$_POST["editarclasificacionProducto"],
+											 "CODIGO_TIPO"=>$_POST["editartipoproductoProducto"],
+											 "STOCK_MIN"=>$_POST["editarStockMinimo"],
+											 "STOCK_MAX"=>$_POST["editarStockMaximo"]);
 
 				$respuesta = ModeloProducto::mdlEditarProducto($tabla, $datos);
 				if($respuesta == "ok"){
@@ -151,7 +240,7 @@ class ControladorProducto{
 				echo'<script>
 					swal({
 						  type: "success",
-						  title: "El tipo de producto ha sido borrado correctamente",
+						  title: "El producto ha sido borrado correctamente",
 						  showConfirmButton: true,
 						  confirmButtonText: "Cerrar"
 						  }).then(function(result){
@@ -194,5 +283,6 @@ class ControladorProducto{
  		return $respuesta;
  	}
 
+	 
 
 }

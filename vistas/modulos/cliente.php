@@ -300,10 +300,11 @@ MODAL LISTAR CONTACTO CLIENTE
               </div>
             </div>
 
-            <table class="table table-bordered table-striped dt-responsive" width="100%">
+            <table class="table table-bordered table-striped dt-responsive Listacontactos" width="100%">
               <thead>
                <tr>
                  <th>Numero de Teléfono</th>
+                 <th>Accciones</th>
                </tr>
               </thead>
               <tbody name="Listacontactos" id="Listacontactos">
@@ -318,3 +319,7 @@ MODAL LISTAR CONTACTO CLIENTE
     </div>
   </div>
 </div>
+<?php
+        $ELIMINARCONTACTO = new ControladorCliente();
+        $ELIMINARCONTACTO -> ctrEliminarContacto();
+ ?>
